@@ -12,13 +12,19 @@ from RoundRobin import RoundRobin
 
 
 class Ui(QtWidgets.QMainWindow):
+
+
     def __init__(self):
         super(Ui, self).__init__()
+
+
 
         uic.loadUi('CPUSchedulingWindow.ui', self)
         self.insertProcess.clicked.connect(self.insertNewProcessDialog)
         self.clearTableBtn.clicked.connect(self.clearTableData)
         self.calculateBtn.clicked.connect(self.calculateProcess)
+        self.removeProcessBtn.clicked.connect(self.removeProcess)
+        self.modifyDataBtn.clicked.connect(self.modifyData)
         self.processTable.setColumnWidth(0, 40)
         self.processTable.verticalHeader().setFixedWidth(30)
         self.processTable.verticalHeader().setDefaultAlignment(Qt.AlignCenter)
@@ -26,15 +32,29 @@ class Ui(QtWidgets.QMainWindow):
 
         self.show()
     def insertNewProcessDialog(self):
-        self.EditDialog = EditDialog(self)
+        isModify = False
+        self.EditDialog = EditDialog(self,isModify)
 
     def clearTableData(self):
         self.processTable.setRowCount(0)
-    def insertProcessInTable(self,arrivalTime,burstTime):
+    def removeProcess(self):
+        self.processTable.removeRow(self.processTable.currentRow())
+
+    def modifyData(self):
+        isModify = True
+        self.EditDialog = EditDialog(self,isModify)
+
+    def insertProcessInTable(self,isModify,arrivalTime,burstTime):
         item = QTableWidgetItem()
         item.setTextAlignment(Qt.AlignCenter)
-        rowPosition = self.processTable.rowCount()
-        self.processTable.insertRow(rowPosition)
+
+        if(isModify == True):
+            rowPosition = self.processTable.currentRow()
+        else:
+            rowPosition = self.processTable.rowCount()
+            self.processTable.insertRow(rowPosition)
+
+
         item.setData(Qt.EditRole, arrivalTime)
         self.processTable.setItem(rowPosition, 1, item)
         item2 = QTableWidgetItem()
@@ -63,17 +83,26 @@ class Ui(QtWidgets.QMainWindow):
 
 
 class EditDialog(QtWidgets.QDialog):
-    def __init__(self, mainWindow):
+    def __init__(self, mainWindow,isModify):
         QtWidgets.QDialog.__init__(self)
         uic.loadUi('editDialog.ui', self)
         self.mainWindow = mainWindow
         self.show()
+        self.isModify = isModify
 
         self.dialogButtonBox.accepted.connect(self.insertIntoTable)
+        if (self.isModify == True):
+            selectedRow = self.mainWindow.processTable.currentRow()
+            self.arrivalTimeText.setValue(int(self.mainWindow.processTable.item(selectedRow, 1).text()))
+            self.burstTimeText.setValue(int(self.mainWindow.processTable.item(selectedRow, 2).text()))
+
 
     def insertIntoTable(self):
-        print(self.mainWindow)
-        self.mainWindow.insertProcessInTable(self.arrivalTimeText.value(), self.burstTimeText.value())
+        if (self.isModify == True):
+            self.mainWindow.insertProcessInTable(self.isModify,self.arrivalTimeText.value(), self.burstTimeText.value())
+        else:
+            self.mainWindow.insertProcessInTable(self.isModify,self.arrivalTimeText.value(), self.burstTimeText.value())
+
 
 
 

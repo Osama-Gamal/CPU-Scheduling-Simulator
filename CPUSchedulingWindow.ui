@@ -35,6 +35,9 @@
     <property name="editTriggers">
      <set>QAbstractItemView::NoEditTriggers</set>
     </property>
+    <property name="selectionBehavior">
+     <enum>QAbstractItemView::SelectRows</enum>
+    </property>
     <property name="showGrid">
      <bool>true</bool>
     </property>
@@ -163,7 +166,7 @@
      <string>Insert Process</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_2">
+   <widget class="QPushButton" name="modifyDataBtn">
     <property name="geometry">
      <rect>
       <x>780</x>
@@ -176,7 +179,7 @@
      <string>Modify Prcess</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_3">
+   <widget class="QPushButton" name="removeProcessBtn">
     <property name="geometry">
      <rect>
       <x>780</x>
