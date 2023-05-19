@@ -132,6 +132,7 @@ class FCFS:
 
         for i in reversed(range(originalWindow.plotBox.count())):
             originalWindow.plotBox.itemAt(i).widget().setParent(None)
+
         originalWindow.plotBox.addWidget(originalWindow.toolbar)
         originalWindow.plotBox.addWidget(originalWindow.canvas)
 

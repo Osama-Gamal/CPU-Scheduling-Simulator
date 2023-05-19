@@ -52,7 +52,7 @@ class Ui(QtWidgets.QMainWindow):
         #self.figure = plt.figure()
         self.canvas = FigureCanvas(self.figure)
         self.toolbar = NavigationToolbar(self.canvas, self)
-
+        #self.toolbar.setStyleSheet("background-color: rgb(0, 170, 255);")
         self.plotBox.addWidget(self.toolbar)
         self.plotBox.addWidget(self.canvas)
 
@@ -86,7 +86,6 @@ class Ui(QtWidgets.QMainWindow):
         ax.set_title('Time Chart')
         ax.legend(title='Chart Keys')
         self.canvas2 = FigureCanvas(self.fig)
-        self.toolbar2 = NavigationToolbar(self.canvas2, self)
         # self.plotBox2.addWidget(self.toolbar2)
         self.plotBox2.addWidget(self.canvas2)
 
