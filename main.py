@@ -39,11 +39,12 @@ class Ui(QtWidgets.QMainWindow):
         self.figure, self.gnt = plt.subplots()
         self.gnt.set_ylim(0, 50)
         self.gnt.set_xlim(0, 50)
-        self.gnt.set_xlabel('seconds since start')
+        self.gnt.set_xlabel('Seconds Since Start')
         self.gnt.set_ylabel('Process ID')
         self.gnt.set_yticks([15, 25, 35])
         self.gnt.set_yticklabels(['1', '2', '3'])
         self.gnt.grid(True)
+        plt.rcParams["font.size"] = 7
 
 
         # fig.show()
@@ -54,6 +55,11 @@ class Ui(QtWidgets.QMainWindow):
 
         self.plotBox.addWidget(self.toolbar)
         self.plotBox.addWidget(self.canvas)
+
+        self.drawChartAverage(0,0)
+
+
+
 
 
 
@@ -66,6 +72,23 @@ class Ui(QtWidgets.QMainWindow):
         ax.plot(data, '*-')
         self.canvas.draw()
 
+    def drawChartAverage(self,AverageTurnaround,AverageWaiting):
+        for i in reversed(range(self.plotBox2.count())):
+            self.plotBox2.itemAt(i).widget().setParent(None)
+
+        self.fig, ax = plt.subplots()
+        chartsLabels = ['Turnaround', 'Waiting']
+        counts = [AverageTurnaround, AverageWaiting]
+        bar_labels = ['Turnaround', 'Waiting']
+        bar_colors = ['tab:orange', 'tab:blue']
+        ax.bar(chartsLabels, counts, label=bar_labels, color=bar_colors)
+        ax.set_ylabel('Time Chart')
+        ax.set_title('Time Chart')
+        ax.legend(title='Chart Keys')
+        self.canvas2 = FigureCanvas(self.fig)
+        self.toolbar2 = NavigationToolbar(self.canvas2, self)
+        # self.plotBox2.addWidget(self.toolbar2)
+        self.plotBox2.addWidget(self.canvas2)
 
     def insertNewProcessDialog(self):
         isModify = False

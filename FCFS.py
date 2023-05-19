@@ -121,6 +121,7 @@ class FCFS:
 
         print(f'Average Waiting Time: {average_waiting_time}')
 
+        originalWindow.drawChartAverage(average_turnaround_time, average_waiting_time)
 
         yTicksArray = [i * 10 for i in processIDs]
         originalWindow.gnt.set_yticks(yTicksArray)

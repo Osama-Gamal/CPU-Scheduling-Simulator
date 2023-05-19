@@ -1,5 +1,11 @@
+import random
+
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QTableWidgetItem
+from matplotlib import pyplot as plt
+from matplotlib.backends.backend_template import FigureCanvas
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 
 class NonPreemptive:
@@ -26,6 +32,7 @@ class NonPreemptive:
         start_time = []
         exit_time = []
         s_time = 0
+        sequence_of_process = []
         process_data.sort(key=lambda x: x[1])
         '''
         Sort processes according to the Arrival Time
@@ -54,8 +61,11 @@ class NonPreemptive:
                 s_time = s_time + ready_queue[0][2]
                 e_time = s_time
                 exit_time.append(e_time)
+                sequence_of_process.append(ready_queue[0][0])
                 for k in range(len(process_data)):
                     if process_data[k][0] == ready_queue[0][0]:
+                        '''print(process_data[k][0]+1, 'Start IN ' , s_time,' End In ', s_time)
+                        print(start_time)'''
                         break
                 process_data[k][3] = 1
                 process_data[k].append(e_time)
@@ -67,6 +77,8 @@ class NonPreemptive:
                 s_time = s_time + normal_queue[0][2]
                 e_time = s_time
                 exit_time.append(e_time)
+                sequence_of_process.append(normal_queue[0][0])
+
                 for k in range(len(process_data)):
                     if process_data[k][0] == normal_queue[0][0]:
                         break
@@ -75,7 +87,8 @@ class NonPreemptive:
 
         t_time = NonPreemptive.calculateTurnaroundTime(self, process_data)
         w_time = NonPreemptive.calculateWaitingTime(self, process_data)
-        NonPreemptive.printData(self, process_data, t_time, w_time)
+        NonPreemptive.printData(self, process_data, t_time, w_time,sequence_of_process,start_time,exit_time)
+
 
     def calculateTurnaroundTime(self, process_data):
         total_turnaround_time = 0
@@ -107,29 +120,43 @@ class NonPreemptive:
         '''
         return average_waiting_time
 
-    def printData(self, process_data, average_turnaround_time, average_waiting_time):
+    def printData(self, process_data, average_turnaround_time, average_waiting_time,sequence_of_process,start_time,exit_time):
         process_data.sort(key=lambda x: x[0])
         '''
         Sort processes according to the Process ID
         '''
-        print("Process_ID  Arrival_Time  Burst_Time      Completed  Completion_Time  Turnaround_Time  Waiting_Time")
+        #print("Process_ID  Arrival_Time  Burst_Time      Completed  Completion_Time  Turnaround_Time  Waiting_Time")
+
+        processIDs = [0] * originalWindow.processTable.rowCount()
+        originalWindow.gnt.cla()
+        originalWindow.gnt.grid(True)
 
         for i in range(len(process_data)):
             for j in range(len(process_data[i])):
-                print(process_data[i][j], end="				")
-                if (j == 5):
+                #print(process_data[i][j], end="				")
+
+                if (j == 0):
+                    processIDs[i] = process_data[i][j]
+                    print(start_time)
+                    originalWindow.gnt.broken_barh([(start_time[i], exit_time[i] - start_time[i])],
+                                                   (process_data[i][0] * 10, 10),
+                                                   facecolors=('tab:' + originalWindow.colorsChart[
+                                                       random.randrange(len(originalWindow.colorsChart))]))
+
+
+                if (j == 4):
                     item2 = QTableWidgetItem()
                     item2.setTextAlignment(Qt.AlignCenter)
                     item2.setData(Qt.EditRole, process_data[i][j])
                     originalWindow.processTable.setItem(i, 3, item2)
 
-                if (j == 6):
+                if (j == 5):
                     item2 = QTableWidgetItem()
                     item2.setTextAlignment(Qt.AlignCenter)
                     item2.setData(Qt.EditRole, process_data[i][j])
                     originalWindow.processTable.setItem(i, 4, item2)
 
-                if (j == 7):
+                if (j == 6):
                     item2 = QTableWidgetItem()
                     item2.setTextAlignment(Qt.AlignCenter)
                     item2.setData(Qt.EditRole, process_data[i][j])
@@ -140,7 +167,18 @@ class NonPreemptive:
 
         print(f'Average Waiting Time: {average_waiting_time}')
 
+        #print('Process Sequence',sequence_of_process)
 
+        originalWindow.drawChartAverage(average_turnaround_time, average_waiting_time)
 
+        yTicksArray = [i * 10 for i in processIDs]
+        originalWindow.gnt.set_yticks(yTicksArray)
+        originalWindow.gnt.set_yticklabels(processIDs)
 
+        originalWindow.canvas = FigureCanvas(originalWindow.figure)
+        originalWindow.toolbar = NavigationToolbar(originalWindow.canvas, originalWindow)
 
+        for i in reversed(range(originalWindow.plotBox.count())):
+            originalWindow.plotBox.itemAt(i).widget().setParent(None)
+        originalWindow.plotBox.addWidget(originalWindow.toolbar)
+        originalWindow.plotBox.addWidget(originalWindow.canvas)

@@ -159,16 +159,14 @@ class Preemptive:
                     originalWindow.processTable.setItem(i, 5, item2)
             '''print()
             
-            print(f'Average Turnaround Time: {average_turnaround_time}')
-
-            print(f'Average Waiting Time: {average_waiting_time}')
-
             print(f'Sequence of Process: {sequence_of_process}')'''
 
+
+        print(f'Average Turnaround Time: {average_turnaround_time}')
+        print(f'Average Waiting Time: {average_waiting_time}')
         print(sequence_of_process,"Start IN: ", )
 
-
-
+        originalWindow.drawChartAverage(average_turnaround_time, average_waiting_time)
 
 
         yTicksArray = [i * 10 for i in processIDs]

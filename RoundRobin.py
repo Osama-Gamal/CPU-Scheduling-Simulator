@@ -1,5 +1,11 @@
+import random
+
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QTableWidgetItem
+from matplotlib import pyplot as plt
+from matplotlib.backends.backend_template import FigureCanvas
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 
 class RoundRobin:
@@ -171,11 +177,25 @@ class RoundRobin:
         '''
         Sort processes according to the Process ID
         '''
-        print(
-            "Process_ID  Arrival_Time  Rem_Burst_Time   Completed  Original_Burst_Time  Completion_Time  Turnaround_Time  Waiting_Time")
+        '''print(
+            "Process_ID  Arrival_Time  Rem_Burst_Time   Completed  Original_Burst_Time  Completion_Time  Turnaround_Time  Waiting_Time")'''
+
+
+        processIDs = [0] * originalWindow.processTable.rowCount()
+        originalWindow.gnt.cla()
+        originalWindow.gnt.grid(True)
+
+
         for i in range(len(process_data)):
             for j in range(len(process_data[i])):
-                print(process_data[i][j], end="				")
+                #print(process_data[i][j], end="				")
+
+
+                if (j == 0):
+                    processIDs[i] = process_data[i][j]
+                    self.getTimeSequence(executed_process, process_data, i)
+
+
                 if (j == 5):
                     item2 = QTableWidgetItem()
                     item2.setTextAlignment(Qt.AlignCenter)
@@ -199,6 +219,48 @@ class RoundRobin:
 
         print(f'Average Waiting Time: {average_waiting_time}')
 
-        print(f'Sequence of Processes: {executed_process}')
+        #print(f'Sequence of Processes: {executed_process}')
+
+        originalWindow.drawChartAverage(average_turnaround_time, average_waiting_time)
+
+        yTicksArray = [i * 10 for i in processIDs]
+        originalWindow.gnt.set_yticks(yTicksArray)
+        originalWindow.gnt.set_yticklabels(processIDs)
+
+        originalWindow.canvas = FigureCanvas(originalWindow.figure)
+        originalWindow.toolbar = NavigationToolbar(originalWindow.canvas, originalWindow)
+
+        for i in reversed(range(originalWindow.plotBox.count())):
+            originalWindow.plotBox.itemAt(i).widget().setParent(None)
+        originalWindow.plotBox.addWidget(originalWindow.toolbar)
+        originalWindow.plotBox.addWidget(originalWindow.canvas)
+
+    def getTimeSequence(self, sequence_of_process, process_data, PID):
+        doOnce = False
+
+        for i in range(len(sequence_of_process)):
+            if (sequence_of_process[i] == PID):
+                if (doOnce == False):
+                    startIn = process_data[0][1] + i
+                    # print("Start In: ", startIn)
+                    doOnce = True
+                if (doOnce == True and i == len(sequence_of_process) - 1):
+                    endIn = process_data[0][1] + i + 1
+                    # print(" End In: ", endIn)
+                    originalWindow.gnt.broken_barh([(startIn, endIn - startIn)],
+                                                   (process_data[PID][0] * 10, 10),
+                                                   facecolors=('tab:' + originalWindow.colorsChart[
+                                                       random.randrange(len(originalWindow.colorsChart))]))
+
+            else:
+                if (doOnce == True):
+                    endIn = process_data[0][1] + i
+                    # print(" End In: ", endIn)
+                    doOnce = False
+                    originalWindow.gnt.broken_barh([(startIn, endIn - startIn)],
+                                                   (process_data[PID][0] * 10, 10),
+                                                   facecolors=('tab:' + originalWindow.colorsChart[
+                                                       random.randrange(len(originalWindow.colorsChart))]))
+
 
 
