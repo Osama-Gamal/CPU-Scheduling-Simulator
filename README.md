@@ -10,7 +10,6 @@ In this project you can simulate the process opeartions based on many different 
 I made this project as operationg system assignment for my college
 
 Preview
-![Screenshot_٢٠٢٣٠٥١٩_١٢٢٤٣٩](https://github.com/Osama-Gamal/CPUSchedulingSimulator/assets/97878002/fc2f6114-de76-4d3d-9795-6bb0dba3eb39)
+![image](https://github.com/Osama-Gamal/CPU-Scheduling-Simulator/assets/97878002/c75872a3-d992-4420-80f4-0a0c26bf89b3)
 
-![Screenshot_٢٠٢٣٠٥١٩_١٢٢٥٠١](https://github.com/Osama-Gamal/CPUSchedulingSimulator/assets/97878002/7d33a371-7067-4945-a8d1-d69fc677d64a)
 
