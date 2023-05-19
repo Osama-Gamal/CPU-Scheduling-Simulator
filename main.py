@@ -1,10 +1,15 @@
+import random
+
+import matplotlib
 from PyQt5 import QtWidgets, uic, QtGui
 import sys
-
+import matplotlib.pyplot as plt
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap, QImage, QColor
 from PyQt5.QtWidgets import QFileDialog, QPushButton, QDialog, QTableWidgetItem
-
+from matplotlib.backends.backend_template import FigureCanvas
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from FCFS import FCFS
 from NonPreemptive import NonPreemptive
 from Preemptive import Preemptive
@@ -17,7 +22,7 @@ class Ui(QtWidgets.QMainWindow):
     def __init__(self):
         super(Ui, self).__init__()
 
-
+        self.colorsChart = ['red', 'blue', 'orange', 'green', 'cyan', 'purple', 'brown']
 
         uic.loadUi('CPUSchedulingWindow.ui', self)
         self.insertProcess.clicked.connect(self.insertNewProcessDialog)
@@ -30,7 +35,38 @@ class Ui(QtWidgets.QMainWindow):
         self.processTable.verticalHeader().setDefaultAlignment(Qt.AlignCenter)
 
 
+
+        self.figure, self.gnt = plt.subplots()
+        self.gnt.set_ylim(0, 50)
+        self.gnt.set_xlim(0, 50)
+        self.gnt.set_xlabel('seconds since start')
+        self.gnt.set_ylabel('Process ID')
+        self.gnt.set_yticks([15, 25, 35])
+        self.gnt.set_yticklabels(['1', '2', '3'])
+        self.gnt.grid(True)
+
+
+        # fig.show()
+
+        #self.figure = plt.figure()
+        self.canvas = FigureCanvas(self.figure)
+        self.toolbar = NavigationToolbar(self.canvas, self)
+
+        self.plotBox.addWidget(self.toolbar)
+        self.plotBox.addWidget(self.canvas)
+
+
+
         self.show()
+
+    def plot(self):
+        data = [random.random() for i in range(10)]
+        self.figure.clear()
+        ax = self.figure.add_subplot(111)
+        ax.plot(data, '*-')
+        self.canvas.draw()
+
+
     def insertNewProcessDialog(self):
         isModify = False
         self.EditDialog = EditDialog(self,isModify)
@@ -41,8 +77,9 @@ class Ui(QtWidgets.QMainWindow):
         self.processTable.removeRow(self.processTable.currentRow())
 
     def modifyData(self):
-        isModify = True
-        self.EditDialog = EditDialog(self,isModify)
+        if(self.processTable.currentRow() != -1):
+            isModify = True
+            self.EditDialog = EditDialog(self,isModify)
 
     def insertProcessInTable(self,isModify,arrivalTime,burstTime):
         item = QTableWidgetItem()
