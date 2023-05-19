@@ -337,7 +337,9 @@ font-weight: bold;</string>
     <property name="styleSheet">
      <string notr="true">color: rgb(0, 0, 0);
 background-color: rgb(255, 255, 255);
-border-radius: 10px;</string>
+border-radius: 10px;
+
+</string>
     </property>
     <property name="text">
      <string>Choose Algorithm Type</string>
@@ -444,7 +446,8 @@ font-weight: bold;</string>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(255, 255, 255);
 color: rgb(0, 0, 0);
-border-radius: 10px;</string>
+border-radius: 10px;
+</string>
     </property>
     <layout class="QVBoxLayout" name="plotBox">
      <property name="topMargin">

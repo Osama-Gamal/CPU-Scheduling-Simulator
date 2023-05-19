@@ -173,7 +173,8 @@ class NonPreemptive:
 
         yTicksArray = [i * 10 for i in processIDs]
         originalWindow.gnt.set_yticks(yTicksArray)
-        originalWindow.gnt.set_yticklabels(processIDs)
+        processIDsIncreased = [i + 1 for i in processIDs]
+        originalWindow.gnt.set_yticklabels(processIDsIncreased)
 
         originalWindow.canvas = FigureCanvas(originalWindow.figure)
         originalWindow.toolbar = NavigationToolbar(originalWindow.canvas, originalWindow)
