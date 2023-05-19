@@ -23,6 +23,7 @@ class Ui(QtWidgets.QMainWindow):
         super(Ui, self).__init__()
 
         self.colorsChart = ['red', 'blue', 'orange', 'green', 'cyan', 'purple', 'brown']
+        plt.rcParams["font.size"] = 7
 
         uic.loadUi('CPUSchedulingWindow.ui', self)
         self.insertProcess.clicked.connect(self.insertNewProcessDialog)
@@ -44,7 +45,6 @@ class Ui(QtWidgets.QMainWindow):
         self.gnt.set_yticks([15, 25, 35])
         self.gnt.set_yticklabels(['1', '2', '3'])
         self.gnt.grid(True)
-        plt.rcParams["font.size"] = 7
 
 
         # fig.show()
