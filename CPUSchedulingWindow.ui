@@ -32,6 +32,11 @@
       <height>251</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="sizeAdjustPolicy">
      <enum>QAbstractScrollArea::AdjustIgnored</enum>
     </property>
@@ -220,7 +225,7 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>340</x>
+      <x>330</x>
       <y>10</y>
       <width>331</width>
       <height>41</height>
