@@ -10,6 +10,8 @@ from PyQt5.QtWidgets import QFileDialog, QPushButton, QDialog, QTableWidgetItem
 from matplotlib.backends.backend_template import FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+import webbrowser
+
 from FCFS import FCFS
 from NonPreemptive import NonPreemptive
 from Preemptive import Preemptive
@@ -31,6 +33,11 @@ class Ui(QtWidgets.QMainWindow):
         self.calculateBtn.clicked.connect(self.calculateProcess)
         self.removeProcessBtn.clicked.connect(self.removeProcess)
         self.modifyDataBtn.clicked.connect(self.modifyData)
+        self.saveAverageChartBtn.clicked.connect(self.saveAverageChart)
+        self.saveGanttChartBtn.clicked.connect(self.saveGanttChart)
+        self.saveTableDataBtn.clicked.connect(self.saveTableData)
+        self.documentationBtn.clicked.connect(self.documentationWebsite)
+        self.reportScreenBtn.clicked.connect(self.saveReport)
         self.processTable.setColumnWidth(0, 40)
         self.processTable.verticalHeader().setFixedWidth(30)
         self.processTable.verticalHeader().setDefaultAlignment(Qt.AlignCenter)
@@ -59,10 +66,6 @@ class Ui(QtWidgets.QMainWindow):
         self.drawChartAverage(0,0)
 
 
-
-
-
-
         self.show()
 
     def plot(self):
@@ -71,6 +74,28 @@ class Ui(QtWidgets.QMainWindow):
         ax = self.figure.add_subplot(111)
         ax.plot(data, '*-')
         self.canvas.draw()
+
+    def saveAverageChart(self):
+        screen = QtWidgets.QApplication.primaryScreen()
+        screenshot = self.verticalWidget_2.grab()
+        screenshot.save('Average Chart.jpg', 'jpg')
+
+    def saveGanttChart(self):
+        screen = QtWidgets.QApplication.primaryScreen()
+        screenshot = self.verticalWidget.grab()
+        screenshot.save('Gantt Chart.jpg', 'jpg')
+
+    def saveTableData(self):
+        screen = QtWidgets.QApplication.primaryScreen()
+        screenshot = self.processTable.grab()
+        screenshot.save('Table Data.jpg', 'jpg')
+
+    def saveReport(self):
+        screen = QtWidgets.QApplication.primaryScreen()
+        screenshot = screen.grabWindow(self.winId())
+        screenshot.save('Report Screen.jpg', 'jpg')
+    def documentationWebsite(self):
+        webbrowser.open('https://cppsecrets.com/users/1108979711510497121461151049710464115111109971051219746101100117/Python-Shortest-Job-First-Preemptive-Algorithm-with-Different-Arrival-Time.php')
 
     def drawChartAverage(self,AverageTurnaround,AverageWaiting):
         for i in reversed(range(self.plotBox2.count())):
