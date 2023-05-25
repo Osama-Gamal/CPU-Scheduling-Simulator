@@ -10,7 +10,4 @@ In this project you can simulate the process opeartions based on many different 
 I made this project as operationg system assignment for my college using Python with QT5 library
 
 Preview
-![image](https://github.com/Osama-Gamal/CPU-Scheduling-Simulator/assets/97878002/a0026ad0-628f-419f-b9fb-aa044fd618a4)
-
-
-
+![image_2023-05-20_13-51-57](https://github.com/Osama-Gamal/CPU-Scheduling-Simulator/assets/97878002/6910c006-34c6-4ece-94ec-0c193e21aea6)
